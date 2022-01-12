@@ -15,8 +15,8 @@
 
 spring:
   profiles:
-    # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
-    #active: testcontainers
+  # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
+  #active: testcontainers
   application:
     name: Organizationservice
   datasource:
@@ -97,6 +97,18 @@ jhipster:
         base64-secret: N2E3NjlhZDI2MGUzNmM5NWU0ZGIwYzY1Y2FkYzM5ZmRiZWVkMzdlZjYwZjBjMmU2ZjNjYmVmOGU0MDRmYjdlYjAxNTFkZmJhODkzZDcyM2IyMzE4NzhlMjQ4NjBmZTEzZjhkNjMzYjcwYzEwN2Y2NThiNWExNWY5NDYwMDY4NjU=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
+
+cloud:
+  aws:
+    credentials:
+      access-key: changeit
+      secret-key: changeit
+    region:
+      static: us-east-1
+    sns:
+      endpoint: changeit
+    sqs:
+      endpoint: changeit
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
