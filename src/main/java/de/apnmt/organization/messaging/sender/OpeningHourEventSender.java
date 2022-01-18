@@ -21,7 +21,7 @@ public class OpeningHourEventSender implements ApnmtEventSender<OpeningHourEvent
 
     @Override
     public void send(String topic, ApnmtEvent<OpeningHourEventDTO> event) {
-        this.log.info("Send event {} to kafka topic {}", event, topic);
+        this.log.info("Send event {} to SNS topic {}", event, topic);
         this.notificationMessagingTemplate.convertAndSend(topic, event);
     }
 
