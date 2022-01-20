@@ -1,5 +1,6 @@
 package de.apnmt.organization;
 
+import de.apnmt.aws.common.config.AwsCloudProperties;
 import de.apnmt.organization.config.ApplicationProperties;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -19,7 +20,7 @@ import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication(scanBasePackages = {"de.apnmt.common", "de.apnmt.aws.common", "de.apnmt.organization.common", "de.apnmt.organization"})
-@EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
+@EnableConfigurationProperties({ LiquibaseProperties.class, AwsCloudProperties.class })
 public class OrganizationserviceApp {
 
     private static final Logger log = LoggerFactory.getLogger(OrganizationserviceApp.class);
