@@ -220,6 +220,9 @@ cloud:
         enabled: false
         queue-size: 512
         log-stream: organisationservice
+    tracing:
+      xray:
+        enabled: false
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

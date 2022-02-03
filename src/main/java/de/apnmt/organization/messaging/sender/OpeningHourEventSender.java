@@ -1,5 +1,7 @@
 package de.apnmt.organization.messaging.sender;
 
+import de.apnmt.aws.common.config.AwsCloudProperties;
+import de.apnmt.aws.common.util.TracingUtil;
 import de.apnmt.common.event.ApnmtEvent;
 import de.apnmt.common.event.value.OpeningHourEventDTO;
 import de.apnmt.common.sender.ApnmtEventSender;
@@ -14,14 +16,18 @@ public class OpeningHourEventSender implements ApnmtEventSender<OpeningHourEvent
     private final Logger log = LoggerFactory.getLogger(OpeningHourEventSender.class);
 
     private NotificationMessagingTemplate notificationMessagingTemplate;
+    private AwsCloudProperties awsCloudProperties;
 
-    public OpeningHourEventSender(NotificationMessagingTemplate notificationMessagingTemplate) {
+    public OpeningHourEventSender(NotificationMessagingTemplate notificationMessagingTemplate, AwsCloudProperties awsCloudProperties) {
         this.notificationMessagingTemplate = notificationMessagingTemplate;
+        this.awsCloudProperties = awsCloudProperties;
     }
 
     @Override
     public void send(String topic, ApnmtEvent<OpeningHourEventDTO> event) {
         this.log.info("Send event {} to SNS topic {}", event, topic);
+        String traceId = TracingUtil.createTraceId(awsCloudProperties.getTracing().getXRay().isEnabled());
+        event.setTraceId(traceId);
         this.notificationMessagingTemplate.convertAndSend(topic, event);
     }
 

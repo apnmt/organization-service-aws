@@ -3,6 +3,8 @@ package de.apnmt.organization.messaging.consumer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.apnmt.aws.common.config.AwsCloudProperties;
+import de.apnmt.aws.common.util.TracingUtil;
 import de.apnmt.common.event.ApnmtEvent;
 import de.apnmt.common.event.value.OrganizationActivationEventDTO;
 import de.apnmt.organization.common.async.controller.OrganizationActivationEventConsumer;
@@ -24,10 +26,12 @@ public class OrganizationActivationSqsEventConsumer extends OrganizationActivati
     private final Logger log = LoggerFactory.getLogger(OrganizationActivationSqsEventConsumer.class);
 
     private final ObjectMapper objectMapper;
+    private final AwsCloudProperties awsCloudProperties;
 
-    public OrganizationActivationSqsEventConsumer(OrganizationService organizationService, ObjectMapper objectMapper) {
+    public OrganizationActivationSqsEventConsumer(OrganizationService organizationService, ObjectMapper objectMapper, AwsCloudProperties awsCloudProperties) {
         super(organizationService);
         this.objectMapper = objectMapper;
+        this.awsCloudProperties = awsCloudProperties;
     }
 
     @SqsListener(value = QueueConstants.ORGANIZATION_ACTIVATION_QUEUE, deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
@@ -35,9 +39,13 @@ public class OrganizationActivationSqsEventConsumer extends OrganizationActivati
         try {
             this.log.info("Received event {} from queue {}", message, QueueConstants.ORGANIZATION_ACTIVATION_QUEUE);
             ApnmtEvent<OrganizationActivationEventDTO> event = this.objectMapper.readValue(message, EVENT_TYPE);
+            TracingUtil.beginTracing("OrganizationActivationSqsEventConsumer.receiveEvent", event.getTraceId(), awsCloudProperties.getTracing().getXRay().isEnabled());
             super.receiveEvent(event);
         } catch (JsonProcessingException e) {
             this.log.error("Malformed message {} for queue {}. Event will be ignored.", message, QueueConstants.ORGANIZATION_ACTIVATION_QUEUE);
+            TracingUtil.addException(e, awsCloudProperties.getTracing().getXRay().isEnabled());
+        } finally {
+            TracingUtil.endTracing(awsCloudProperties.getTracing().getXRay().isEnabled());
         }
     }
 
