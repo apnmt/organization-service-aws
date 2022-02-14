@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ConditionalOnProperty(
-    value = "cloud.aws.tracing,xray.enabled",
+    value = "cloud.aws.tracing.xray.enabled",
     havingValue = "true")
 public class TracingDatabaseConfiguration extends HikariConfig {
 
