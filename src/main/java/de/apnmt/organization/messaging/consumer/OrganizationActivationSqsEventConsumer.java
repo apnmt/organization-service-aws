@@ -15,6 +15,7 @@ import io.awspring.cloud.messaging.listener.SqsMessageDeletionPolicy;
 import io.awspring.cloud.messaging.listener.annotation.SqsListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +25,9 @@ public class OrganizationActivationSqsEventConsumer extends OrganizationActivati
     };
 
     private final Logger log = LoggerFactory.getLogger(OrganizationActivationSqsEventConsumer.class);
+
+    @Value("${spring.application.name}")
+    public String appName;
 
     private final ObjectMapper objectMapper;
     private final AwsCloudProperties awsCloudProperties;
@@ -39,7 +43,7 @@ public class OrganizationActivationSqsEventConsumer extends OrganizationActivati
         try {
             this.log.info("Received event {} from queue {}", message, QueueConstants.ORGANIZATION_ACTIVATION_QUEUE);
             ApnmtEvent<OrganizationActivationEventDTO> event = this.objectMapper.readValue(message, EVENT_TYPE);
-            TracingUtil.beginTracing("OrganizationActivationSqsEventConsumer.receiveEvent", event.getTraceId(), awsCloudProperties.getTracing().getXRay().isEnabled());
+            TracingUtil.beginTracing(appName, event.getTraceId(), awsCloudProperties.getTracing().getXRay().isEnabled());
             super.receiveEvent(event);
         } catch (JsonProcessingException e) {
             this.log.error("Malformed message {} for queue {}. Event will be ignored.", message, QueueConstants.ORGANIZATION_ACTIVATION_QUEUE);
