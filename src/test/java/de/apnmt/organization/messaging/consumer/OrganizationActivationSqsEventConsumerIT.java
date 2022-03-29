@@ -1,9 +1,5 @@
 package de.apnmt.organization.messaging.consumer;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
 import de.apnmt.aws.common.test.AbstractEventConsumerIT;
 import de.apnmt.common.ApnmtTestUtil;
 import de.apnmt.common.TopicConstants;
@@ -17,6 +13,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -37,7 +38,7 @@ class OrganizationActivationSqsEventConsumerIT extends AbstractEventConsumerIT {
 
     @Test
     void organizationActivationTest() throws InterruptedException {
-        Organization organization = new Organization().name("Test").mail("test@test.de").phone("12345678").ownerId(1L).active(false);
+        Organization organization = new Organization().name("Test").mail("test@test.de").phone("12345678").owner("user_1").active(false);
         this.organizationRepository.saveAndFlush(organization);
 
         int databaseSizeBeforeCreate = this.organizationRepository.findAll().size();
@@ -56,7 +57,7 @@ class OrganizationActivationSqsEventConsumerIT extends AbstractEventConsumerIT {
 
     @Test
     void organizationDeactivationTest() throws InterruptedException {
-        Organization organization = new Organization().name("Test").mail("test@test.de").phone("12345678").ownerId(1L).active(true);
+        Organization organization = new Organization().name("Test").mail("test@test.de").phone("12345678").owner("user_1").active(true);
         this.organizationRepository.saveAndFlush(organization);
 
         int databaseSizeBeforeCreate = this.organizationRepository.findAll().size();
