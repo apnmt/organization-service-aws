@@ -33,7 +33,7 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/Organizationservice
+    url: jdbc:postgresql://localhost:5432/Organizationservice?stringtype=unspecified
     username: Organizationservice
     password:
     hikari:
