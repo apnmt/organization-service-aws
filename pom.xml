@@ -115,7 +115,7 @@
         <dependency>
             <groupId>de.apnmt.organization</groupId>
             <artifactId>organization-service-common</artifactId>
-            <version>0.0.5-SNAPSHOT</version>
+            <version>0.0.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.apnmt.aws.common</groupId>
